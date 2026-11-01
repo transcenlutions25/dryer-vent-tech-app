@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{margin:0;width:1080px;font-family:system-ui,Roboto,Arial,sans-serif;background:#fff;color:#0D1321}
+.top{background:#0B2545;color:#fff;padding:40px 48px;display:flex;align-items:center;gap:24px}
+.top h1{margin:0;font-size:46px}.top p{margin:4px 0 0;font-size:22px;opacity:.9}
+.band{background:#F26B1D;color:#fff;padding:14px 48px;font-size:24px;font-weight:700}
+.wrap{padding:28px 48px}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.plan{border:4px solid #CBD2DC;border-radius:18px;padding:22px}
+.plan.hot{border-color:#F26B1D;position:relative}.plan.hot:before{content:"MOST POPULAR";position:absolute;top:-16px;left:20px;background:#F26B1D;color:#fff;font-weight:800;padding:2px 12px;border-radius:8px;font-size:16px}
+.plan h2{margin:0;font-size:30px;color:#0B2545}.price{font-size:54px;font-weight:900;margin:6px 0}.price small{font-size:20px;font-weight:600}
+.plan i{color:#B45309;font-style:normal;font-size:16px}.plan ul{padding-left:22px;margin:8px 0 0;font-size:19px;line-height:1.5}
+.yr{font-size:17px;color:#4A5568;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:19px;margin-top:10px}th,td{padding:8px 10px;border-bottom:2px solid #E2E8F0;text-align:right}th:first-child,td:first-child{text-align:left}
+thead th{background:#0B2545;color:#fff}tr.tot td{font-weight:800;border-top:3px solid #0B2545}tr.pr td{font-weight:800;color:#147A3D}
+h3{font-size:26px;margin:26px 0 4px;color:#0B2545}
+.extras{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.ex{background:#FFF1E8;border:3px solid #F26B1D;border-radius:14px;padding:14px;font-size:20px}.ex b{display:block;font-size:28px;color:#0B2545}
+.pay{margin-top:20px;background:#0B2545;color:#fff;border-radius:14px;padding:18px 22px;font-size:22px;font-weight:700}
+.foot{padding:14px 48px 30px;font-size:15px;color:#4A5568}
+</style></head><body>
+<div class="top"><svg width="96" height="96" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#F26B1D"/><path d="M14 22h22a6 6 0 0 1 6 6v20H30V34H14z" fill="#0B2545"/><path d="M44 24c4 0 6 2 6 5M44 30c3 0 4 1 4 3M44 18c6 0 10 4 10 10" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/><rect x="12" y="44" width="20" height="6" rx="2" fill="#fff"/></svg>
+<div><h1>Your DVT Command Plan</h1><p>from Transcenlutions LLC · Prepared for: Jacob Mills, Dryer Vent Tech</p></div></div>
+<div class="band">What you pay me each month for your business app — and exactly what it covers</div>
+<div class="wrap">
+<div class="plans">
+ <div class="plan"><h2>Starter</h2><div class="price">$69<small>/mo</small></div><div class="yr">$745/yr (save 10%)</div><ul><li>Owner + 2 techs</li><li>Job tickets, airflow &amp; photos</li><li>Safety reports + invoices</li><li>CRM + annual reminders</li><li>Tax-prep export</li><li>1 hr support/mo</li></ul></div>
+ <div class="plan hot"><h2>Pro</h2><div class="price">$189<small>/mo</small></div><div class="yr">$2,041/yr (save 10%)</div><ul><li>Up to 6 crew</li><li>Everything in Starter</li><li>Cloud sync, all phones <i>(coming soon)</i></li><li>Auto text reminders, 500/mo <i>(coming soon)</i></li><li>AI job notes &amp; quotes <i>(coming soon)</i></li><li>2 hrs support/mo</li></ul></div>
+ <div class="plan"><h2>Fleet</h2><div class="price">$349<small>/mo</small></div><div class="yr">$3,769/yr (save 10%)</div><ul><li>Unlimited crew</li><li>Everything in Pro</li><li>1,500 texts/mo <i>(coming soon)</i></li><li>Apartment/PM portals <i>(coming soon)</i></li><li>Extra photo storage <i>(coming soon)</i></li><li>4 hrs support/mo</li></ul></div>
+</div>
+<h3>What your monthly payment covers</h3>
+<table><thead><tr><th>Cost</th><th>Starter</th><th>Pro</th><th>Fleet</th></tr></thead><tbody>
+<tr><td>Hosting (Cloudflare Pages, free tier)</td><td>$0</td><td>$0</td><td>$0</td></tr>
+<tr><td>Database (Supabase Free / Pro $25)</td><td>$0</td><td>$25</td><td>$25</td></tr>
+<tr><td>Domain + email</td><td>$2</td><td>$2</td><td>$6</td></tr>
+<tr><td>Texting (Twilio ≈$0.011/text + number + 10DLC)</td><td>$0</td><td>$11</td><td>$22</td></tr>
+<tr><td>AI usage</td><td>$0</td><td>$5</td><td>$15</td></tr>
+<tr><td>Photo storage overage</td><td>$0</td><td>$0</td><td>$10</td></tr>
+<tr><td>App store (Google Play $25 one-time, spread)</td><td>$2</td><td>$2</td><td>$2</td></tr>
+<tr><td>My support labor @ $40/hr</td><td>$40</td><td>$80</td><td>$160</td></tr>
+<tr class="tot"><td>My total cost to run it</td><td>$44</td><td>$125</td><td>$240</td></tr>
+<tr class="pr"><td>My profit (pay monthly)</td><td>$25 (57%)</td><td>$64 (51%)</td><td>$109 (45%)</td></tr>
+<tr class="pr"><td>My profit (pay yearly)</td><td>$18 (41%)</td><td>$45 (36%)</td><td>$74 (31%)</td></tr>
+</tbody></table>
+<div class="extras"><div class="ex"><b>$299</b>One-time setup fee: your logo, import your customers, train your crew</div><div class="ex"><b>14 days</b>Free trial of the app — no card needed</div><div class="ex"><b>10% off</b>When you pay me yearly</div></div>
+<div class="pay">💡 My fee pays for itself: if the app's yearly reminders rebook just 2 of your cleanings a month, that covers the Pro plan.</div>
+</div>
+<div class="foot">You are paying Transcenlutions LLC for the app, hosting and support. Profit % = my profit ÷ my cost. Vendor prices checked Nov 2026; texting and AI billed at cost if usage runs higher. Transcenlutions LLC · transcenlutions@gmail.com</div>
+</body></html>
