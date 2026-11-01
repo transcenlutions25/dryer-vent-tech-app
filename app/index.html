@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B2545">
+<title>DVT Command</title>
+<style>
+:root{--brand:#0B2545;--brand2:#13315C;--accent:#F26B1D;--accentText:#fff;--bg:#F4F6FA;--card:#fff;--text:#0D1321;--muted:#4A5568;--line:#CBD2DC;--ok:#147A3D;--warn:#B45309;--bad:#B91C1C;--r:14px}
+[data-theme=dark]{--bg:#0A0F1A;--card:#141B2B;--text:#F1F5F9;--muted:#B6C2D2;--line:#2C3A52;--brand:#0B2545;--ok:#4ADE80;--warn:#FBBF24;--bad:#F87171}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:19px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--brand);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+header h1{font-size:20px;margin:0;line-height:1.1}header small{display:block;font-size:14px;opacity:.85;font-weight:400}
+header .sp{flex:1}
+.ib{background:transparent;border:2px solid #ffffff55;color:#fff;border-radius:12px;min-width:48px;height:48px;font-size:22px}
+main{padding:14px 14px 110px;max-width:760px;margin:0 auto}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:2px solid var(--line);display:flex;z-index:6;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{flex:1;background:none;border:0;color:var(--muted);font-size:14px;font-weight:700;padding:8px 2px 10px;min-height:68px}
+nav.tabs button span{display:block;font-size:24px}
+nav.tabs button.on{color:var(--accent);box-shadow:inset 0 4px 0 var(--accent)}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:14px;margin:0 0 12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}
+h2{font-size:24px;margin:6px 0 12px}h3{font-size:20px;margin:0 0 8px}
+.muted{color:var(--muted)}.big{font-size:28px;font-weight:800}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:56px;padding:0 18px;border-radius:12px;border:2px solid var(--brand2);background:var(--card);color:var(--text);font-size:18px;font-weight:700;text-decoration:none;cursor:pointer}
+[data-theme=dark] .btn{border-color:#5B7BB0}
+.btn.p{background:var(--accent);border-color:var(--accent);color:var(--accentText)}
+.btn.d{border-color:var(--bad);color:var(--bad)}
+.btn.s{min-height:48px;font-size:16px;padding:0 12px}
+.btn.w{width:100%}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kpi{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:12px}.kpi b{display:block;font-size:26px}.kpi span{color:var(--muted);font-size:15px}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:14px;font-weight:700;border:2px solid currentColor}
+.t-ok{color:var(--ok)}.t-warn{color:var(--warn)}.t-bad{color:var(--bad)}.t-acc{color:var(--accent)}
+.sample{background:#FFE8D9;color:#8A3A0A;border:2px dashed #F26B1D;padding:10px 12px;border-radius:12px;margin-bottom:12px;font-weight:700}
+[data-theme=dark] .sample{background:#3A1F0E;color:#FFC9A6}
+.sbadge{font-size:12px;font-weight:800;background:#F26B1D;color:#fff;border-radius:6px;padding:1px 6px;vertical-align:middle;margin-left:6px}
+label{display:block;font-weight:700;margin:10px 0 4px;font-size:17px}
+input,select,textarea{width:100%;font-size:19px;padding:12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--text);min-height:54px}
+textarea{min-height:96px}
+input:focus,select:focus,textarea:focus{outline:3px solid var(--accent);border-color:var(--accent)}
+.search{margin-bottom:12px}
+.item{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:12px 0;border-bottom:2px solid var(--line)}.item:last-child{border:0}
+.item .grow{flex:1;min-width:0}
+.subtabs{display:flex;gap:8px;overflow-x:auto;margin:0 0 12px;padding-bottom:4px}
+.subtabs button{flex:0 0 auto;min-height:48px;padding:0 14px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--text);font-size:16px;font-weight:700}
+.subtabs button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+[data-theme=dark] .subtabs button.on{background:var(--accent);border-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:17px}td,th{padding:8px 6px;border-bottom:2px solid var(--line);text-align:left}td.n,th.n{text-align:right}
+dialog{border:0;border-radius:18px;padding:0;width:min(680px,96vw);max-height:92vh;background:var(--card);color:var(--text)}
+dialog::backdrop{background:#000a}
+.dh{position:sticky;top:0;background:var(--brand);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;z-index:2}.dh h3{margin:0;flex:1;color:#fff}
+.db{padding:6px 16px 16px}.df{position:sticky;bottom:0;background:var(--card);padding:12px 16px;border-top:2px solid var(--line);display:flex;gap:10px}.df .btn{flex:1}
+.photos{display:flex;gap:8px;flex-wrap:wrap}.photos img{width:96px;height:96px;object-fit:cover;border-radius:10px;border:2px solid var(--line)}
+.kan{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:8px;overflow-x:auto}
+.kan .col{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px;min-height:120px}.kan .col h4{margin:0 0 6px;font-size:16px}
+.kan .c{border:2px solid var(--line);border-radius:10px;padding:8px;margin-bottom:6px;font-size:16px;background:var(--bg)}
+.chk{display:flex;align-items:center;gap:12px;padding:8px 0;font-size:18px}.chk input{width:30px;height:30px;min-height:0}
+#mic{position:fixed;right:16px;bottom:88px;width:68px;height:68px;border-radius:50%;background:var(--accent);color:#fff;font-size:30px;border:4px solid #fff;box-shadow:0 4px 14px #0006;z-index:7}
+#mic.on{background:var(--bad);animation:p 1s infinite}@keyframes p{50%{transform:scale(1.08)}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:170px;background:var(--text);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:700;z-index:9}
+#print{display:none}
+@media print{body>*:not(#print){display:none!important}#print{display:block;color:#000;background:#fff;font-size:14px}#print h1{color:#0B2545}}
+</style>
+</head>
+<body>
+<header>
+  <svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#F26B1D"/><path d="M14 22h22a6 6 0 0 1 6 6v20H30V34H14z" fill="#0B2545"/><path d="M44 24c4 0 6 2 6 5M44 30c3 0 4 1 4 3M44 18c6 0 10 4 10 10" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/><rect x="12" y="44" width="20" height="6" rx="2" fill="#fff"/></svg>
+  <h1><span id="hName">Dryer Vent Tech</span><small>Nashville · Command</small></h1>
+  <div class="sp"></div>
+  <a class="ib" id="hCall" href="tel:+16154552313" aria-label="Call office" style="display:flex;align-items:center;justify-content:center;text-decoration:none">📞</a>
+  <button class="ib" onclick="jay&&jay.open()" aria-label="Ask Jay">💬</button>
+  <button class="ib" onclick="toggleTheme()" aria-label="Light or dark mode">🌓</button>
+</header>
+<main id="app"></main>
+<nav class="tabs" id="tabs"></nav>
+<button id="mic" aria-label="Voice type into the selected box" onclick="dictate()">🎤</button>
+<dialog id="dlg"></dialog>
+<div id="print"></div>
+<script>
+'use strict';
+const KEY='dvt_command_v1';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10);
+const money=n=>'$'+(Number(n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const money0=n=>'$'+Math.round(Number(n)||0).toLocaleString('en-US');
+const today=()=>new Date().toISOString().slice(0,10);
+const addDays=(d,n)=>{const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
+const fmtD=d=>d?new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
+const yr=d=>(d||'').slice(0,4);
+
+const CATS=['Advertising','Car & truck (actual)','Contract labor','Equipment & tools','Insurance','Legal & professional','Office & software','Phone & internet','Rent','Repairs & maintenance','Supplies & parts','Taxes & licenses','Travel & meals','Wages (W-2)','Other'];
+const STAGES=['Lead','Quoted','Booked','Customer','Repeat'];
+const JSTAT=['Scheduled','En Route','In Progress','Done','Canceled'];
+const CTYPES=['Homeowner','Property Manager','Apartment Complex','Commercial','Realtor / Inspector'];
+const MATS=['Foil (flex)','Vinyl (unsafe)','Semi-rigid aluminum','Rigid metal'];
+const TERMS=['Side wall','Roof','Soffit','Crawlspace','Unknown'];
+const INSPECT=[['cap','Exterior cap/flap opens freely'],['bird','No bird or rodent nest'],['trans','Transition hose not crushed / kinked'],['mat','Duct is metal (no vinyl/foil in wall)'],['len','Run within code length (35 ft less elbows)'],['screws','No screws protruding into duct'],['tape','Joints use foil tape, not duct tape'],['lintTrap','Lint trap & cabinet clear']];
+// 2026 IRS rate: 72.5¢ Jan–Jun, 76¢ Jul 1 onward
+const mileRate=d=>(d>='2026-07-01'&&d<'2027-01-01')?0.76:(yr(d)==='2026'?0.725:0.725);
+
+let S, view='today', sub={owner:'dash'}, ownerOK=false, q='';
+
+function sampleData(){
+  const t=today(), D=n=>addDays(t,n);
+  const techs=[
+    {id:'t1',name:'Jacob Mills',role:'Owner / Lead Tech',phone:'6154552313',payType:'Owner draw',rate:0,worker:'Owner',active:true,sample:true},
+    {id:'t2',name:'Marcus Reed',role:'Technician',phone:'6155550142',payType:'Commission %',rate:35,worker:'1099',active:true,sample:true},
+    {id:'t3',name:'Devin Carter',role:'Helper',phone:'6155550188',payType:'Hourly',rate:19,worker:'W-2',active:true,sample:true}];
+  const C=(id,name,type,phone,addr,stage,last,extra={})=>({id,name,type,phone,email:'',address:addr,units:1,stage,source:'Google',lastService:last,nextDue:last?addDays(last,365):'',notes:'',sample:true,...extra});
+  const customers=[
+    C('c1','Linda Thompson','Homeowner','6155550101','2214 Belmont Blvd, Nashville TN 37212','Repeat',D(-350)),
+    C('c2','Greenway Apartments (Tasha – PM)','Apartment Complex','6155550110','4400 Gallatin Pike, Madison TN 37115','Customer',D(-20),{units:48,notes:'48 units, 3 stories, roof terminations bldg C'}),
+    C('c3','Robert & Kim Nguyen','Homeowner','6155550123','1180 Old Hickory Blvd, Brentwood TN 37027','Customer',D(-6)),
+    C('c4','Cumberland Property Group','Property Manager','6155550131','100 Church St, Nashville TN 37201','Booked',''),
+    C('c5','Angela Brooks','Homeowner','6155550145','315 Rivergate Pkwy, Goodlettsville TN 37072','Quoted',''),
+    C('c6','Franklin Coin Laundry','Commercial','6155550150','510 Main St, Franklin TN 37064','Lead',''),
+    C('c7','James Patterson','Homeowner','6155550162','908 Due West Ave, Madison TN 37115','Repeat',D(-372)),
+    C('c8','Music Row Realty (inspections)','Realtor / Inspector','6155550177','1600 Division St, Nashville TN 37203','Lead','')];
+  const L=(pid,qty=1)=>{const p=PRICE0.find(x=>x.id===pid);return{name:p.name,qty,price:p.price,taxable:p.taxable}};
+  const J=(id,cid,date,time,tech,status,lines,v={})=>({id,customerId:cid,date,time,techId:tech,status,lines,ventLength:v.len||14,elbows:v.elb||2,material:v.mat||'Semi-rigid aluminum',termination:v.term||'Side wall',stories:v.st||1,airBefore:v.b||'',airAfter:v.a||'',lint:v.lint||'',inspect:v.ins||{},result:v.res||'',photos:[],notes:v.notes||'',invoiceId:'',sample:true});
+  const jobs=[
+    J('j1','c3',D(0),'09:00','t2','Scheduled',[L('p1'),L('p6')],{len:22,elb:3,term:'Roof',st:2}),
+    J('j2','c4',D(0),'11:30','t1','Scheduled',[L('p9',6)],{notes:'6 units bldg A — get gate code'}),
+    J('j3','c5',D(0),'15:00','t2','Scheduled',[L('p4')]),
+    J('j4','c2',D(-20),'08:00','t1','Done',[L('p9',24),L('p5',2)],{b:'220',a:'710',lint:'9',res:'Pass',ins:{cap:1,bird:0,trans:1,mat:1,len:1,screws:1,tape:1,lintTrap:1},notes:'2 bird nests removed, bldg C'}),
+    J('j5','c3',D(-6),'10:00','t2','Done',[L('p1'),L('p7')],{b:'310',a:'820',lint:'1.5',res:'Pass',ins:{cap:1,bird:1,trans:1,mat:1,len:1,screws:1,tape:1,lintTrap:1}}),
+    J('j6','c1',D(-350),'13:00','t1','Done',[L('p1')],{b:'400',a:'880',lint:'1',res:'Pass'}),
+    J('j7','c7',D(-372),'14:00','t1','Done',[L('p1'),L('p3')],{b:'180',a:'760',lint:'2',res:'Needs repair',notes:'Recommend reroute — 41 ft run'}),
+    J('j8','c1',D(-45),'09:30','t2','Done',[L('p8')],{res:'Pass'}),
+    J('j9','c2',D(-80),'08:00','t1','Done',[L('p9',24)],{res:'Pass'}),
+    J('j10','c7',D(-120),'10:00','t3','Done',[L('p10',12),L('p7')],{res:'Pass'})];
+  const invoices=[]; let n=1001;
+  jobs.filter(j=>j.status==='Done').forEach((j,i)=>{const inv={id:'i'+i,num:n++,jobId:j.id,customerId:j.customerId,date:j.date,lines:j.lines,taxRate:9.25,status:i===0?'Unpaid':'Paid',paidDate:i===0?'':j.date,method:i===0?'':['Card','Check','Cash','Zelle'][i%4],sample:true};j.invoiceId=inv.id;invoices.push(inv)});
+  const E=(d,cat,vendor,amt)=>({id:uid(),date:d,category:cat,vendor,amount:amt,notes:'',sample:true});
+  const expenses=[E(D(-3),'Supplies & parts','Lowe\'s – Rivergate','186.40'),E(D(-10),'Insurance','Next Insurance – GL','94.00'),E(D(-14),'Advertising','Google Local Services','250.00'),E(D(-30),'Equipment & tools','Rotobrush parts','312.75'),E(D(-31),'Phone & internet','T-Mobile Business','85.00'),E(D(-60),'Supplies & parts','Home Depot – Madison','142.10')];
+  const mileage=[{id:uid(),date:D(-6),techId:'t2',miles:'24',purpose:'Nguyen – Brentwood',sample:true},{id:uid(),date:D(-20),techId:'t1',miles:'18',purpose:'Greenway Apts',sample:true},{id:uid(),date:D(-45),techId:'t2',miles:'31',purpose:'Thompson + supply run',sample:true}];
+  const timesheets=[{id:uid(),techId:'t3',date:D(-120),hours:'6.5',sample:true},{id:uid(),techId:'t3',date:D(-20),hours:'8',sample:true}];
+  return {techs,customers,jobs,invoices,expenses,mileage,timesheets,pricebook:JSON.parse(JSON.stringify(PRICE0)),nextInv:n,hasSample:true,
+    settings:{company:'Dryer Vent Tech',owner:'Jacob Mills',phone:'(615) 455-2313',address:'3551 Dickerson Pike, Nashville TN 37207',web:'nashvilledryerventtech.com',email:'',taxRate:9.25,pin:'1234',estRate:12,theme:''}};
+}
+const PRICE0=[
+  {id:'p1',name:'Dryer vent cleaning (up to 15 ft)',price:149,taxable:false},
+  {id:'p2',name:'Long run add-on (each extra 10 ft)',price:35,taxable:false},
+  {id:'p3',name:'Roof / 2nd-story access',price:75,taxable:false},
+  {id:'p4',name:'Inspection + airflow test only',price:89,taxable:false},
+  {id:'p5',name:'Bird / rodent nest removal',price:95,taxable:false},
+  {id:'p6',name:'Exterior vent cover install',price:129,taxable:true},
+  {id:'p7',name:'Transition hose replace (semi-rigid)',price:69,taxable:true},
+  {id:'p8',name:'Booster fan install',price:449,taxable:true},
+  {id:'p9',name:'Apartment unit cleaning (multi-unit rate)',price:99,taxable:false},
+  {id:'p10',name:'Vent reroute (per ft)',price:18,taxable:true},
+  {id:'p11',name:'Dryer cabinet / lint trap deep clean',price:59,taxable:false}];
+
+function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}if(!S)S=sampleData();if(!S.direction)S.direction={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Storage full — remove some photos')}}
+function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+const cust=id=>S.customers.find(c=>c.id===id)||{name:'(deleted customer)'};
+const tech=id=>S.techs.find(t=>t.id===id)||{name:'Unassigned'};
+const sub_=lines=>lines.reduce((a,l)=>a+l.qty*l.price,0);
+const tax_=(lines,r)=>lines.reduce((a,l)=>a+(l.taxable?l.qty*l.price*r/100:0),0);
+const invTotal=i=>sub_(i.lines)+tax_(i.lines,i.taxRate);
+const jobTotal=j=>sub_(j.lines)+tax_(j.lines,S.settings.taxRate);
+const sb=o=>o&&o.sample?'<span class="sbadge">Sample</span>':'';
+
+/* ---------- theme ---------- */
+function applyTheme(){const t=S.settings.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}
+function toggleTheme(){S.settings.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';save();applyTheme()}
+
+/* ---------- nav ---------- */
+const TABS=[['today','📅','Today'],['jobs','🧰','Jobs'],['customers','👥','Customers'],['invoices','🧾','Invoices'],['owner','🛡️','Owner']];
+function go(v){view=v;q='';render();scrollTo(0,0)}
+function renderTabs(){$('#tabs').innerHTML=TABS.map(([k,i,l])=>`<button class="${view===k?'on':''}" onclick="go('${k}')"><span>${i}</span>${l}</button>`).join('')}
+function sampleBar(){return S.hasSample?`<div class="sample">Showing SAMPLE data so you can try everything. <button class="btn s d" style="margin-left:6px" onclick="clearSample()">Clear sample data</button></div>`:''}
+async function clearSample(){if(!await ask('Remove all sample records? Your own entries stay.'))return;['techs','customers','jobs','invoices','expenses','mileage','timesheets'].forEach(k=>S[k]=S[k].filter(x=>!x.sample));S.hasSample=false;save();render();toast('Sample data cleared')}
+function render(){
+  $('#hName').textContent=S.settings.company;$('#hCall').href='tel:'+S.settings.phone.replace(/\D/g,'');
+  renderTabs();const a=$('#app');
+  a.innerHTML=sampleBar()+({today:vToday,jobs:vJobs,customers:vCustomers,invoices:vInvoices,owner:vOwner}[view])();
+}
+const srch=(ph)=>`<input class="search" type="search" placeholder="${ph}" value="${esc(q)}" oninput="q=this.value;renderList()" aria-label="Search">`;
+let renderList=()=>{};
+
+/* ---------- TODAY ---------- */
+function vToday(){
+  const t=today(),js=S.jobs.filter(j=>j.date===t&&j.status!=='Canceled').sort((a,b)=>a.time.localeCompare(b.time));
+  const due=S.customers.filter(c=>c.nextDue&&c.nextDue<=addDays(t,30)).sort((a,b)=>a.nextDue.localeCompare(b.nextDue));
+  return `<h2>Today · ${fmtD(t)}</h2>
+  <div class="row" style="margin-bottom:12px"><button class="btn p" onclick="editJob()">＋ New job</button><button class="btn" onclick="editCustomer()">＋ New customer</button></div>
+  <div class="card"><h3>Route (${js.length} jobs)</h3>${js.map(jobRow).join('')||'<p class="muted">No jobs today.</p>'}</div>
+  <div class="card"><h3>🔔 Annual reminders due (${due.length})</h3>${due.map(c=>`<div class="item"><div class="grow"><b>${esc(c.name)}</b>${sb(c)}<div class="muted">Due ${fmtD(c.nextDue)} · last ${fmtD(c.lastService)}</div></div><a class="btn s p" href="sms:${esc(c.phone)}?body=${encodeURIComponent(`Hi ${c.name.split(' ')[0]}, this is ${S.settings.company}. Your yearly dryer vent cleaning is due — it keeps your dryer safe from fires and saves energy. Reply YES and we'll get you scheduled! ${S.settings.phone}`)}">Text</a></div>`).join('')||'<p class="muted">Nobody due in the next 30 days.</p>'}</div>`;
+}
+function jobRow(j){const c=cust(j.customerId),st=j.status;const cls=st==='Done'?'t-ok':st==='Canceled'?'t-bad':st==='Scheduled'?'t-acc':'t-warn';
+  return `<div class="item"><div class="grow" onclick="openJob('${j.id}')" style="cursor:pointer"><b>${esc(j.time)} · ${esc(c.name)}</b>${sb(j)}<div class="muted">${esc(c.address||'')}</div><div>${esc(j.lines.map(l=>(l.qty>1?l.qty+'× ':'')+l.name).join(', '))}</div><div><span class="tag ${cls}">${st}</span> <span class="muted">${esc(tech(j.techId).name)} · ${money(jobTotal(j))}</span></div></div>
+  <div style="display:flex;flex-direction:column;gap:6px">${c.address?`<a class="btn s" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(c.address)}" target="_blank" rel="noopener">🧭</a>`:''}${c.phone?`<a class="btn s" href="tel:${esc(c.phone)}">📞</a>`:''}</div></div>`}
+
+/* ---------- JOBS ---------- */
+function vJobs(){renderList=()=>{const f=q.toLowerCase();$('#list').innerHTML=S.jobs.filter(j=>!f||(cust(j.customerId).name+' '+j.status+' '+tech(j.techId).name+' '+j.date).toLowerCase().includes(f)).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)).map(jobRow).join('')||'<p class="muted">No jobs found.</p>'};
+  setTimeout(renderList);return `<h2>Jobs</h2><button class="btn p w" style="margin-bottom:12px" onclick="editJob()">＋ New job ticket</button>${srch('Search jobs, customers, techs…')}<div class="card" id="list"></div>`}
+
+function openJob(id){const j=S.jobs.find(x=>x.id===id);if(!j)return;const c=cust(j.customerId);const imp=(j.airBefore&&j.airAfter)?Math.round((j.airAfter-j.airBefore)/j.airBefore*100):null;
+  const ins=INSPECT.map(([k,l])=>`<div>${j.inspect[k]?'✅':'⬜'} ${l}</div>`).join('');
+  dlgOpen(`Job · ${esc(c.name)}`,`<p><b>${fmtD(j.date)} ${esc(j.time)}</b> · ${esc(tech(j.techId).name)} · <span class="tag t-acc">${j.status}</span></p>
+   <p class="muted">${esc(c.address||'')}</p>
+   <table>${j.lines.map(l=>`<tr><td>${l.qty}× ${esc(l.name)}${l.taxable?' <small class="muted">(tax)</small>':''}</td><td class="n">${money(l.qty*l.price)}</td></tr>`).join('')}<tr><td>Tax ${S.settings.taxRate}%</td><td class="n">${money(tax_(j.lines,S.settings.taxRate))}</td></tr><tr><th>Total</th><th class="n">${money(jobTotal(j))}</th></tr></table>
+   <h3 style="margin-top:14px">Vent run</h3><p>${j.ventLength} ft · ${j.elbows} elbows · ${esc(j.material)} · ${esc(j.termination)} · ${j.stories} story</p>
+   <p>Airflow: <b>${j.airBefore||'—'}</b> → <b>${j.airAfter||'—'}</b> ft/min ${imp!==null?`<span class="tag t-ok">+${imp}%</span>`:''} · Lint removed: ${j.lint||'—'} lb</p>
+   <h3>Inspection ${j.result?`<span class="tag ${j.result==='Pass'?'t-ok':'t-bad'}">${esc(j.result)}</span>`:''}</h3>${ins}
+   ${j.photos.length?`<h3 style="margin-top:12px">Photos</h3><div class="photos">${j.photos.map(p=>`<img src="${p}" alt="job photo">`).join('')}</div>`:''}
+   ${j.notes?`<p><b>Notes:</b> ${esc(j.notes)}</p>`:''}
+   <div class="row" style="margin-top:12px">${['En Route','In Progress','Done'].map(s=>`<button class="btn s" onclick="setStatus('${j.id}','${s}')">${s}</button>`).join('')}</div>
+   <div class="row" style="margin-top:8px"><button class="btn s" onclick="printReport('${j.id}')">🖨️ Safety report</button><button class="btn s" onclick="makeInvoice('${j.id}')">🧾 ${j.invoiceId?'View':'Create'} invoice</button></div>`,
+   `<button class="btn d" onclick="delJob('${j.id}')">Delete</button><button class="btn p" onclick="editJob('${j.id}')">Edit</button>`)}
+function setStatus(id,s){const j=S.jobs.find(x=>x.id===id);j.status=s;if(s==='Done'){const c=S.customers.find(x=>x.id===j.customerId);if(c){c.lastService=j.date;c.nextDue=addDays(j.date,365);if(['Lead','Quoted','Booked'].includes(c.stage))c.stage='Customer';else if(c.stage==='Customer'&&S.jobs.filter(x=>x.customerId===c.id&&x.status==='Done').length>1)c.stage='Repeat'}}save();dlgClose();render();toast('Status: '+s)}
+async function delJob(id){if(!await ask('Delete this job?'))return;S.jobs=S.jobs.filter(j=>j.id!==id);save();dlgClose();render()}
+
+let editLines=[],editPhotos=[];
+function editJob(id){const j=id?S.jobs.find(x=>x.id===id):{id:'',customerId:S.customers[0]?.id||'',date:today(),time:'09:00',techId:S.techs[0]?.id||'',status:'Scheduled',lines:[],ventLength:'',elbows:'',material:'Semi-rigid aluminum',termination:'Side wall',stories:1,airBefore:'',airAfter:'',lint:'',inspect:{},result:'',photos:[],notes:''};
+  editLines=JSON.parse(JSON.stringify(j.lines));editPhotos=[...j.photos];
+  const opt=(arr,v)=>arr.map(o=>`<option ${o===v?'selected':''}>${esc(o)}</option>`).join('');
+  dlgOpen(id?'Edit job':'New job ticket',`<form id="jf">
+  <label>Customer</label><select name="customerId">${S.customers.map(c=>`<option value="${c.id}" ${c.id===j.customerId?'selected':''}>${esc(c.name)}</option>`).join('')}</select>
+  <button type="button" class="btn s" style="margin-top:6px" onclick="dlgClose();editCustomer()">＋ Add new customer first</button>
+  <div class="row"><div><label>Date</label><input type="date" name="date" value="${j.date}"></div><div><label>Time</label><input type="time" name="time" value="${j.time}"></div></div>
+  <div class="row"><div><label>Tech</label><select name="techId">${S.techs.filter(t=>t.active).map(t=>`<option value="${t.id}" ${t.id===j.techId?'selected':''}>${esc(t.name)}</option>`).join('')}</select></div><div><label>Status</label><select name="status">${opt(JSTAT,j.status)}</select></div></div>
+  <label>Services</label><div id="lines"></div>
+  <select id="addLine" onchange="addLine(this.value);this.value=''"><option value="">＋ Add a service…</option>${S.pricebook.map(p=>`<option value="${p.id}">${esc(p.name)} — ${money(p.price)}</option>`).join('')}</select>
+  <h3 style="margin-top:16px">Vent run</h3>
+  <div class="row"><div><label>Length (ft)</label><input inputmode="decimal" name="ventLength" value="${esc(j.ventLength)}"></div><div><label>Elbows (90°)</label><input inputmode="numeric" name="elbows" value="${esc(j.elbows)}"></div></div>
+  <div class="row"><div><label>Duct material</label><select name="material">${opt(MATS,j.material)}</select></div><div><label>Exits at</label><select name="termination">${opt(TERMS,j.termination)}</select></div></div>
+  <label>Stories</label><input inputmode="numeric" name="stories" value="${esc(j.stories)}">
+  <div class="row"><div><label>Airflow before (ft/min)</label><input inputmode="decimal" name="airBefore" value="${esc(j.airBefore)}"></div><div><label>Airflow after (ft/min)</label><input inputmode="decimal" name="airAfter" value="${esc(j.airAfter)}"></div></div>
+  <label>Lint removed (lb)</label><input inputmode="decimal" name="lint" value="${esc(j.lint)}">
+  <h3 style="margin-top:16px">Safety inspection</h3>
+  ${INSPECT.map(([k,l])=>`<label class="chk"><input type="checkbox" name="ins_${k}" ${j.inspect[k]?'checked':''}>${l}</label>`).join('')}
+  <label>Result</label><select name="result">${opt(['','Pass','Needs repair','Fail – fire hazard'],j.result)}</select>
+  <label>Photos (before / after / lint)</label><input type="file" accept="image/*" capture="environment" multiple onchange="addPhotos(this.files)"><div class="photos" id="ph" style="margin-top:8px"></div>
+  <label>Notes</label><textarea name="notes">${esc(j.notes)}</textarea></form>`,
+  `<button class="btn" onclick="dlgClose()">Cancel</button><button class="btn p" onclick="saveJob('${j.id}')">Save job</button>`);
+  drawLines();drawPhotos();
+}
+function addLine(pid){const p=S.pricebook.find(x=>x.id===pid);if(!p)return;editLines.push({name:p.name,qty:1,price:p.price,taxable:p.taxable});drawLines()}
+function drawLines(){$('#lines').innerHTML=editLines.map((l,i)=>`<div class="item"><div class="grow"><b>${esc(l.name)}</b><div class="row" style="margin-top:6px"><div><small>Qty</small><input inputmode="decimal" value="${l.qty}" onchange="editLines[${i}].qty=+this.value||1;drawLines()"></div><div><small>Price</small><input inputmode="decimal" value="${l.price}" onchange="editLines[${i}].price=+this.value||0;drawLines()"></div></div></div><button type="button" class="btn s d" onclick="editLines.splice(${i},1);drawLines()" aria-label="Remove">✕</button></div>`).join('')+`<p><b>Subtotal ${money(sub_(editLines))}</b></p>`}
+function drawPhotos(){$('#ph').innerHTML=editPhotos.map((p,i)=>`<img src="${p}" alt="photo ${i+1}" onclick="ask('Remove photo?').then(ok=>{if(ok){editPhotos.splice(${i},1);drawPhotos()}})">`).join('')}
+function addPhotos(files){[...files].forEach(f=>{const r=new FileReader();r.onload=e=>{const im=new Image();im.onload=()=>{const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);editPhotos.push(c.toDataURL('image/jpeg',.6));drawPhotos()};im.src=e.target.result};r.readAsDataURL(f)})}
+function saveJob(id){const f=new FormData($('#jf'));const o=Object.fromEntries(f);const ins={};INSPECT.forEach(([k])=>ins[k]=o['ins_'+k]?1:0);
+  const data={customerId:o.customerId,date:o.date,time:o.time,techId:o.techId,status:o.status,lines:editLines,ventLength:o.ventLength,elbows:o.elbows,material:o.material,termination:o.termination,stories:o.stories,airBefore:o.airBefore,airAfter:o.airAfter,lint:o.lint,inspect:ins,result:o.result,photos:editPhotos,notes:o.notes};
+  if(!data.customerId)return toast('Add a customer first');
+  if(id){Object.assign(S.jobs.find(j=>j.id===id),data)}else{S.jobs.push({id:uid(),invoiceId:'',...data})}
+  save();dlgClose();render();toast('Job saved')}
+
+function printReport(id){const j=S.jobs.find(x=>x.id===id),c=cust(j.customerId),s=S.settings;
+  $('#print').innerHTML=`<h1>${esc(s.company)} — Dryer Vent Safety Report</h1><p>${esc(s.address)} · ${esc(s.phone)} · ${esc(s.web)}</p><hr>
+  <p><b>Customer:</b> ${esc(c.name)}<br><b>Address:</b> ${esc(c.address)}<br><b>Date:</b> ${fmtD(j.date)} · <b>Technician:</b> ${esc(tech(j.techId).name)}</p>
+  <h2>Vent system</h2><p>${j.ventLength} ft run, ${j.elbows} elbows, ${esc(j.material)}, exits at ${esc(j.termination)}, ${j.stories} story.</p>
+  <h2>Airflow</h2><p>Before: ${j.airBefore||'—'} ft/min · After: ${j.airAfter||'—'} ft/min · Lint removed: ${j.lint||'—'} lb</p>
+  <h2>Inspection — ${esc(j.result||'Not rated')}</h2><ul>${INSPECT.map(([k,l])=>`<li>${j.inspect[k]?'PASS':'ATTENTION'} — ${l}</li>`).join('')}</ul>
+  ${j.notes?`<p><b>Technician notes:</b> ${esc(j.notes)}</p>`:''}
+  <div>${j.photos.map(p=>`<img src="${p}" style="width:180px;margin:4px">`).join('')}</div>
+  <p><b>Next recommended cleaning:</b> ${fmtD(addDays(j.date,365))}. Clogged dryer vents are a leading cause of home dryer fires; clean yearly.</p>`;
+  setTimeout(()=>print(),100)}
+
+/* ---------- CUSTOMERS / CRM ---------- */
+function vCustomers(){renderList=()=>{const f=q.toLowerCase();$('#list').innerHTML=S.customers.filter(c=>!f||(c.name+c.phone+c.address+c.type+c.stage).toLowerCase().includes(f)).sort((a,b)=>a.name.localeCompare(b.name)).map(c=>{const spent=S.invoices.filter(i=>i.customerId===c.id&&i.status==='Paid').reduce((a,i)=>a+invTotal(i),0);
+  return `<div class="item"><div class="grow" onclick="openCustomer('${c.id}')" style="cursor:pointer"><b>${esc(c.name)}</b>${sb(c)}<div class="muted">${esc(c.type)}${c.units>1?' · '+c.units+' units':''} · ${esc(c.address)}</div><div><span class="tag t-acc">${c.stage}</span> <span class="muted">Lifetime ${money0(spent)}${c.nextDue?' · due '+fmtD(c.nextDue):''}</span></div></div>${c.phone?`<a class="btn s" href="tel:${esc(c.phone)}">📞</a>`:''}</div>`}).join('')||'<p class="muted">No customers found.</p>'};
+  setTimeout(renderList);return `<h2>Customers</h2><button class="btn p w" style="margin-bottom:12px" onclick="editCustomer()">＋ New customer</button>${srch('Search name, phone, address…')}<div class="card" id="list"></div>`}
+function openCustomer(id){const c=cust(id);const js=S.jobs.filter(j=>j.customerId===id).sort((a,b)=>b.date.localeCompare(a.date));
+  dlgOpen(esc(c.name),`<p>${esc(c.type)} · <span class="tag t-acc">${c.stage}</span>${c.units>1?' · '+c.units+' units':''}</p><p>${esc(c.address)}<br>${esc(c.phone)} ${esc(c.email)}</p><p class="muted">Source: ${esc(c.source)} · Last service ${fmtD(c.lastService)} · Next due ${fmtD(c.nextDue)}</p>${c.notes?`<p>${esc(c.notes)}</p>`:''}
+  <div class="row">${c.phone?`<a class="btn s" href="tel:${esc(c.phone)}">📞 Call</a><a class="btn s" href="sms:${esc(c.phone)}">💬 Text</a>`:''}${c.address?`<a class="btn s" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(c.address)}">🧭 Map</a>`:''}</div>
+  <h3 style="margin-top:14px">History (${js.length})</h3>${js.map(j=>`<div class="item" onclick="dlgClose();openJob('${j.id}')" style="cursor:pointer"><div class="grow">${fmtD(j.date)} · ${esc(j.status)}<div class="muted">${esc(j.lines.map(l=>l.name).join(', '))}</div></div><b>${money(jobTotal(j))}</b></div>`).join('')||'<p class="muted">No jobs yet.</p>'}
+  <button class="btn p w" style="margin-top:10px" onclick="dlgClose();editJob();setTimeout(()=>{document.querySelector('[name=customerId]').value='${id}'},50)">＋ Book a job</button>`,
+  `<button class="btn d" onclick="delCustomer('${id}')">Delete</button><button class="btn p" onclick="editCustomer('${id}')">Edit</button>`)}
+function editCustomer(id){const c=id?cust(id):{name:'',type:'Homeowner',phone:'',email:'',address:'',units:1,stage:'Lead',source:'Google',lastService:'',nextDue:'',notes:''};
+  formDlg(id?'Edit customer':'New customer',[['name','Name / business'],['type','Type','select',CTYPES],['phone','Phone','tel'],['email','Email','email'],['address','Service address'],['units','Units (apartments)','number'],['stage','Pipeline stage','select',STAGES],['source','Lead source','select',['Google','Thumbtack','Referral','Facebook','Nextdoor','Repeat','Property manager','Other']],['lastService','Last service','date'],['nextDue','Next due (annual reminder)','date'],['notes','Notes','textarea']],c,o=>{if(!o.name)return toast('Name is required'),false;o.units=+o.units||1;if(o.lastService&&!o.nextDue)o.nextDue=addDays(o.lastService,365);if(id)Object.assign(c,o);else S.customers.push({id:uid(),...o});return true})}
+async function delCustomer(id){if(!await ask('Delete this customer?'))return;S.customers=S.customers.filter(c=>c.id!==id);save();dlgClose();render()}
+
+/* ---------- INVOICES ---------- */
+function vInvoices(){const unpaid=S.invoices.filter(i=>i.status!=='Paid');
+  renderList=()=>{const f=q.toLowerCase();$('#list').innerHTML=S.invoices.filter(i=>!f||(i.num+' '+cust(i.customerId).name+' '+i.status).toLowerCase().includes(f)).sort((a,b)=>b.num-a.num).map(i=>`<div class="item" onclick="openInvoice('${i.id}')" style="cursor:pointer"><div class="grow"><b>#${i.num} · ${esc(cust(i.customerId).name)}</b>${sb(i)}<div class="muted">${fmtD(i.date)}</div></div><div style="text-align:right"><b>${money(invTotal(i))}</b><br><span class="tag ${i.status==='Paid'?'t-ok':'t-bad'}">${i.status}</span></div></div>`).join('')||'<p class="muted">No invoices yet. Open a finished job and tap “Create invoice”.</p>'};
+  setTimeout(renderList);return `<h2>Invoices</h2><div class="kpis"><div class="kpi"><span>Unpaid</span><b>${money0(unpaid.reduce((a,i)=>a+invTotal(i),0))}</b></div><div class="kpi"><span>Unpaid count</span><b>${unpaid.length}</b></div></div>${srch('Search invoice #, customer…')}<div class="card" id="list"></div>`}
+function makeInvoice(jid){const j=S.jobs.find(x=>x.id===jid);if(j.invoiceId){dlgClose();return openInvoice(j.invoiceId)}
+  const inv={id:uid(),num:S.nextInv++,jobId:j.id,customerId:j.customerId,date:today(),lines:JSON.parse(JSON.stringify(j.lines)),taxRate:S.settings.taxRate,status:'Unpaid',paidDate:'',method:''};S.invoices.push(inv);j.invoiceId=inv.id;save();dlgClose();openInvoice(inv.id);toast('Invoice #'+inv.num+' created')}
+function openInvoice(id){const i=S.invoices.find(x=>x.id===id),c=cust(i.customerId),s=S.settings,tot=invTotal(i);
+  const msg=`${s.company} invoice #${i.num}: ${money(tot)} for dryer vent service on ${fmtD(i.date)}. Thank you! ${s.phone}`;
+  dlgOpen(`Invoice #${i.num}`,`<p><b>${esc(c.name)}</b><br>${esc(c.address)}</p><p class="muted">${fmtD(i.date)}</p>
+  <table>${i.lines.map(l=>`<tr><td>${l.qty}× ${esc(l.name)}</td><td class="n">${money(l.qty*l.price)}</td></tr>`).join('')}<tr><td>Subtotal</td><td class="n">${money(sub_(i.lines))}</td></tr><tr><td>Sales tax ${i.taxRate}% (taxable items)</td><td class="n">${money(tax_(i.lines,i.taxRate))}</td></tr><tr><th>Total</th><th class="n">${money(tot)}</th></tr></table>
+  <p>Status: <span class="tag ${i.status==='Paid'?'t-ok':'t-bad'}">${i.status}</span> ${i.paidDate?'· '+fmtD(i.paidDate)+' · '+esc(i.method):''}</p>
+  ${i.status!=='Paid'?`<label>Payment method</label><select id="pm">${['Card','Cash','Check','Zelle','Cash App','Venmo','ACH'].map(m=>`<option>${m}</option>`).join('')}</select><button class="btn p w" style="margin-top:10px" onclick="markPaid('${id}')">✔ Mark paid</button>`:`<button class="btn w" style="margin-top:10px" onclick="markUnpaid('${id}')">Mark unpaid</button>`}
+  <div class="row" style="margin-top:10px">${c.phone?`<a class="btn s" href="sms:${esc(c.phone)}?body=${encodeURIComponent(msg)}">💬 Text invoice</a>`:''}${c.email?`<a class="btn s" href="mailto:${esc(c.email)}?subject=${encodeURIComponent('Invoice #'+i.num)}&body=${encodeURIComponent(msg)}">✉️ Email</a>`:''}<button class="btn s" onclick="printInvoice('${id}')">🖨️ Print / PDF</button></div>`,
+  `<button class="btn d" onclick="delInvoice('${id}')">Delete</button><button class="btn" onclick="dlgClose()">Close</button>`)}
+function markPaid(id){const i=S.invoices.find(x=>x.id===id);i.status='Paid';i.paidDate=today();i.method=$('#pm').value;save();dlgClose();render();toast('Paid ✔')}
+function markUnpaid(id){const i=S.invoices.find(x=>x.id===id);i.status='Unpaid';i.paidDate='';i.method='';save();dlgClose();render()}
+async function delInvoice(id){if(!await ask('Delete invoice?'))return;S.invoices=S.invoices.filter(i=>i.id!==id);S.jobs.forEach(j=>{if(j.invoiceId===id)j.invoiceId=''});save();dlgClose();render()}
+function printInvoice(id){const i=S.invoices.find(x=>x.id===id),c=cust(i.customerId),s=S.settings;
+  $('#print').innerHTML=`<h1>${esc(s.company)}</h1><p>${esc(s.address)} · ${esc(s.phone)}</p><h2>Invoice #${i.num} — ${fmtD(i.date)}</h2><p><b>Bill to:</b> ${esc(c.name)}<br>${esc(c.address)}</p><table>${i.lines.map(l=>`<tr><td>${l.qty}× ${esc(l.name)}</td><td class="n">${money(l.qty*l.price)}</td></tr>`).join('')}<tr><td>Sales tax</td><td class="n">${money(tax_(i.lines,i.taxRate))}</td></tr><tr><th>Total</th><th class="n">${money(invTotal(i))}</th></tr></table><p>Status: ${i.status}</p><p>Thank you for your business!</p>`;setTimeout(()=>print(),100)}
+
+/* ---------- OWNER COMMAND PANEL ---------- */
+function vOwner(){
+  if(!ownerOK)return `<h2>🛡️ Owner Command Panel</h2><div class="card"><p>Owner-only: crew, CRM pipeline, money and tax prep.</p><label>Owner PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off" onkeydown="if(event.key==='Enter')unlock()"><button class="btn p w" style="margin-top:12px" onclick="unlock()">Unlock</button>${S.hasSample?'<p class="muted">Sample PIN: 1234 (change it in Settings).</p>':''}</div>`;
+  const T=[['dash','📊 Dashboard'],['dir','🧭 Direction'],['crew','👷 Crew'],['pipe','📈 CRM pipeline'],['tax','🧮 Tax prep'],['exp','💳 Expenses'],['miles','🚐 Mileage'],['price','🏷️ Price book'],['set','⚙️ Settings']];
+  return `<h2>🛡️ Owner Command Panel</h2><div class="subtabs">${T.map(([k,l])=>`<button class="${sub.owner===k?'on':''}" onclick="sub.owner='${k}';render()">${l}</button>`).join('')}</div>`+({dash:oDash,dir:oDir,crew:oCrew,pipe:oPipe,tax:oTax,exp:oExp,miles:oMiles,price:oPrice,set:oSet}[sub.owner])();
+}
+function unlock(){if($('#pin').value===String(S.settings.pin)){ownerOK=true;render()}else toast('Wrong PIN')}
+const paidIn=(from,to)=>S.invoices.filter(i=>i.status==='Paid'&&i.paidDate>=from&&i.paidDate<=to);
+function oDash(){const t=today(),m0=t.slice(0,7)+'-01',y0=t.slice(0,4)+'-01-01';
+  const mtd=paidIn(m0,t),ytd=paidIn(y0,t),rev=a=>a.reduce((s,i)=>s+sub_(i.lines),0);
+  const ar=S.invoices.filter(i=>i.status!=='Paid').reduce((a,i)=>a+invTotal(i),0);
+  const done=S.jobs.filter(j=>j.status==='Done'&&j.date>=y0);const avg=done.length?done.reduce((a,j)=>a+sub_(j.lines),0)/done.length:0;
+  const expY=S.expenses.filter(e=>e.date>=y0).reduce((a,e)=>a+(+e.amount||0),0);
+  const months=[...Array(6)].map((_,k)=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-5+k);const ym=d.toISOString().slice(0,7);return{l:d.toLocaleString('en-US',{month:'short'}),v:S.invoices.filter(i=>i.status==='Paid'&&(i.paidDate||'').startsWith(ym)).reduce((a,i)=>a+sub_(i.lines),0)}});
+  const mx=Math.max(1,...months.map(m=>m.v));
+  const byTech=S.techs.map(tc=>{const js=done.filter(j=>j.techId===tc.id);return{n:tc.name,c:js.length,v:js.reduce((a,j)=>a+sub_(j.lines),0)}});
+  return `<div class="card"><h3>🧭 Company direction</h3>${directionStatus()}<button class="btn s" style="margin-top:8px" onclick="sub.owner='dir';render()">Open direction</button></div><div class="kpis"><div class="kpi"><span>Revenue this month</span><b>${money0(rev(mtd))}</b></div><div class="kpi"><span>Revenue this year</span><b>${money0(rev(ytd))}</b></div><div class="kpi"><span>Unpaid (A/R)</span><b class="t-bad">${money0(ar)}</b></div><div class="kpi"><span>Avg ticket</span><b>${money0(avg)}</b></div><div class="kpi"><span>Jobs done (YTD)</span><b>${done.length}</b></div><div class="kpi"><span>Profit est. (YTD)</span><b>${money0(rev(ytd)-expY)}</b></div></div>
+  <div class="card"><h3>Revenue · last 6 months</h3><svg viewBox="0 0 300 140" width="100%" role="img" aria-label="Monthly revenue bars">${months.map((m,i)=>{const h=m.v/mx*96;return `<rect x="${12+i*48}" y="${110-h}" width="34" height="${h}" rx="4" fill="var(--accent)"/><text x="${29+i*48}" y="128" font-size="12" text-anchor="middle" fill="currentColor">${m.l}</text><text x="${29+i*48}" y="${104-h}" font-size="10" text-anchor="middle" fill="currentColor">${m.v?'$'+Math.round(m.v/100)/10+'k':''}</text>`}).join('')}</svg></div>
+  <div class="card"><h3>Crew leaderboard (YTD)</h3><table><tr><th>Tech</th><th class="n">Jobs</th><th class="n">Revenue</th></tr>${byTech.map(b=>`<tr><td>${esc(b.n)}</td><td class="n">${b.c}</td><td class="n">${money0(b.v)}</td></tr>`).join('')}</table></div>`}
+
+function techPay(tc,from,to){const js=S.jobs.filter(j=>j.techId===tc.id&&j.status==='Done'&&j.date>=from&&j.date<=to);const hrs=S.timesheets.filter(x=>x.techId===tc.id&&x.date>=from&&x.date<=to).reduce((a,x)=>a+(+x.hours||0),0);const rev=js.reduce((a,j)=>a+sub_(j.lines),0);
+  const pay=tc.payType==='Hourly'?hrs*tc.rate:tc.payType==='Per job'?js.length*tc.rate:tc.payType==='Commission %'?rev*tc.rate/100:0;return{jobs:js.length,hrs,rev,pay}}
+function oCrew(){const t=today(),from=addDays(t,-13);
+  return `<div class="row" style="margin-bottom:12px"><button class="btn p" onclick="editTech()">＋ Add crew member</button><button class="btn" onclick="logHours()">⏱️ Log hours</button></div>
+  ${S.techs.map(tc=>{const p=techPay(tc,from,t),js=S.jobs.filter(j=>j.techId===tc.id&&j.date>=t&&j.status!=='Done'&&j.status!=='Canceled');return `<div class="card"><div class="item" style="border:0;padding:0"><div class="grow"><h3>${esc(tc.name)}${sb(tc)} ${tc.active?'':'<span class="tag t-bad">Inactive</span>'}</h3><div class="muted">${esc(tc.role)} · ${esc(tc.worker)} · ${esc(tc.payType)}${tc.rate?' '+(tc.payType==='Commission %'?tc.rate+'%':money(tc.rate)):''}</div></div><button class="btn s" onclick="editTech('${tc.id}')">Edit</button></div>
+  <p>Last 14 days: <b>${p.jobs}</b> jobs · <b>${p.hrs}</b> hrs · revenue ${money0(p.rev)} · <b>pay ${money(p.pay)}</b></p>
+  <p class="muted">Upcoming: ${js.length?js.map(j=>fmtD(j.date)+' '+esc(cust(j.customerId).name)).join('; '):'none'}</p>${tc.phone?`<a class="btn s" href="tel:${esc(tc.phone)}">📞 Call</a> <a class="btn s" href="sms:${esc(tc.phone)}">💬 Text</a>`:''}</div>`}).join('')}
+  <div class="card"><h3>Payroll · last 14 days</h3><table><tr><th>Crew</th><th>Type</th><th class="n">Pay</th></tr>${S.techs.map(tc=>`<tr><td>${esc(tc.name)}</td><td>${esc(tc.worker)}</td><td class="n">${money(techPay(tc,from,t).pay)}</td></tr>`).join('')}</table><button class="btn s" style="margin-top:10px" onclick="csv('payroll.csv',[['Crew','Worker type','Pay type','Jobs','Hours','Revenue','Pay']].concat(S.techs.map(tc=>{const p=techPay(tc,'${from}','${t}');return[tc.name,tc.worker,tc.payType,p.jobs,p.hrs,p.rev.toFixed(2),p.pay.toFixed(2)]})))">⬇️ Export payroll CSV</button></div>
+  <div class="card"><h3>Time log</h3>${S.timesheets.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="item"><div class="grow">${fmtD(x.date)} · ${esc(tech(x.techId).name)}${sb(x)}</div><b>${x.hours} h</b><button class="btn s d" onclick="S.timesheets=S.timesheets.filter(y=>y.id!=='${x.id}');save();render()" aria-label="Delete">✕</button></div>`).join('')||'<p class="muted">No hours logged.</p>'}</div>`}
+function editTech(id){const tc=id?tech(id):{name:'',role:'Technician',phone:'',payType:'Hourly',rate:18,worker:'W-2',active:true};
+  formDlg(id?'Edit crew member':'Add crew member',[['name','Name'],['role','Role'],['phone','Phone','tel'],['worker','Worker type','select',['W-2','1099','Owner']],['payType','Pay type','select',['Hourly','Per job','Commission %','Owner draw']],['rate','Rate ($/hr, $/job, or %)','number'],['active','Active','select',['true','false']]],{...tc,active:String(tc.active)},o=>{if(!o.name)return toast('Name required'),false;o.rate=+o.rate||0;o.active=o.active==='true';if(id)Object.assign(tc,o);else S.techs.push({id:uid(),...o});return true},id?async()=>{if(await ask('Remove crew member?')){S.techs=S.techs.filter(x=>x.id!==id);save();dlgClose();render()}}:null)}
+function logHours(){formDlg('Log hours',[['techId','Crew member','select',S.techs.map(t=>[t.id,t.name])],['date','Date','date'],['hours','Hours','number']],{techId:S.techs[0]?.id,date:today(),hours:8},o=>{S.timesheets.push({id:uid(),...o});return true})}
+
+function oPipe(){return `<p class="muted">Tap a card to open. Use Edit to move stages.</p><div class="kan">${STAGES.map(s=>{const cs=S.customers.filter(c=>c.stage===s);return `<div class="col"><h4>${s} (${cs.length})</h4>${cs.map(c=>`<div class="c" onclick="openCustomer('${c.id}')">${esc(c.name)}<br><small class="muted">${esc(c.type)}</small><div style="margin-top:4px">${STAGES.indexOf(s)<4?`<button class="btn s" style="min-height:40px" onclick="event.stopPropagation();moveStage('${c.id}',1)">Next ▶</button>`:''}</div></div>`).join('')}</div>`}).join('')}</div>
+  <div class="card" style="margin-top:12px"><h3>Lead sources</h3><table>${[...new Set(S.customers.map(c=>c.source))].map(src=>`<tr><td>${esc(src)}</td><td class="n">${S.customers.filter(c=>c.source===src).length}</td></tr>`).join('')}</table></div>`}
+function moveStage(id,d){const c=cust(id);c.stage=STAGES[Math.min(4,STAGES.indexOf(c.stage)+d)];save();render()}
+
+let taxYear=String(new Date().getFullYear());
+function taxCalc(Y){const inY=d=>yr(d)===Y;const paid=S.invoices.filter(i=>i.status==='Paid'&&inY(i.paidDate));
+  const gross=paid.reduce((a,i)=>a+sub_(i.lines),0),salesTax=paid.reduce((a,i)=>a+tax_(i.lines,i.taxRate),0);
+  const exp={};CATS.forEach(c=>exp[c]=0);S.expenses.filter(e=>inY(e.date)).forEach(e=>exp[e.category]=(exp[e.category]||0)+(+e.amount||0));
+  const from=Y+'-01-01',to=Y+'-12-31';const labor=S.techs.map(tc=>({tc,pay:techPay(tc,from,to).pay}));
+  const contract=labor.filter(l=>l.tc.worker==='1099').reduce((a,l)=>a+l.pay,0),wages=labor.filter(l=>l.tc.worker==='W-2').reduce((a,l)=>a+l.pay,0);
+  exp['Contract labor']+=contract;exp['Wages (W-2)']+=wages;
+  const miles=S.mileage.filter(m=>inY(m.date));const mileDed=miles.reduce((a,m)=>a+(+m.miles||0)*mileRate(m.date),0),mileTot=miles.reduce((a,m)=>a+(+m.miles||0),0);
+  const totalExp=Object.values(exp).reduce((a,b)=>a+b,0)+mileDed;const net=gross-totalExp;
+  const se=Math.max(0,net)*0.9235*0.153,fed=Math.max(0,net-se/2)*(S.settings.estRate/100);
+  const q=[['Q1 (Jan–Mar)','01','03',`Apr 15, ${Y}`],['Q2 (Apr–May)','04','05',`Jun 15, ${Y}`],['Q3 (Jun–Aug)','06','08',`Sep 15, ${Y}`],['Q4 (Sep–Dec)','09','12',`Jan 15, ${+Y+1}`]].map(([l,a,b,due])=>{const g=paid.filter(i=>i.paidDate.slice(5,7)>=a&&i.paidDate.slice(5,7)<=b).reduce((s,i)=>s+sub_(i.lines),0);return{l,due,g}});
+  const k1099=labor.filter(l=>l.tc.worker==='1099');
+  return{paid,gross,salesTax,exp,mileDed,mileTot,totalExp,net,se,fed,q,k1099}}
+function oTax(){const Y=taxYear,t=taxCalc(Y);const yrs=[...new Set([String(new Date().getFullYear()),...S.invoices.map(i=>yr(i.paidDate)).filter(Boolean)])].sort().reverse();
+  return `<div class="card"><label>Tax year</label><select onchange="taxYear=this.value;render()">${yrs.map(y=>`<option ${y===Y?'selected':''}>${y}</option>`).join('')}</select>
+  <p class="muted" style="margin-top:10px">Organizes your numbers for your tax preparer (Schedule C style). Estimates only — not tax advice.</p></div>
+  <div class="kpis"><div class="kpi"><span>Gross receipts</span><b>${money0(t.gross)}</b></div><div class="kpi"><span>Total expenses</span><b>${money0(t.totalExp)}</b></div><div class="kpi"><span>Net profit</span><b>${money0(t.net)}</b></div><div class="kpi"><span>Sales tax collected</span><b>${money0(t.salesTax)}</b></div></div>
+  <div class="card"><h3>Expenses by category</h3><table>${Object.entries(t.exp).filter(([,v])=>v).map(([k,v])=>`<tr><td>${k}</td><td class="n">${money(v)}</td></tr>`).join('')}<tr><td>Vehicle — standard mileage (${t.mileTot.toLocaleString()} mi)</td><td class="n">${money(t.mileDed)}</td></tr><tr><th>Total</th><th class="n">${money(t.totalExp)}</th></tr></table>
+  <p class="muted">2026 IRS business mileage: 72.5¢/mi Jan–Jun, 76¢/mi from Jul 1 (applied by trip date). Use mileage OR actual car costs, not both.</p></div>
+  <div class="card"><h3>Estimated taxes</h3><table><tr><td>Self-employment tax (15.3% × 92.35%)</td><td class="n">${money(t.se)}</td></tr><tr><td>Federal income tax @ ${S.settings.estRate}% (change in Settings)</td><td class="n">${money(t.fed)}</td></tr><tr><th>Set aside for the year</th><th class="n">${money(t.se+t.fed)}</th></tr></table>
+  <h3 style="margin-top:12px">Quarterly (Form 1040-ES)</h3><table><tr><th>Period</th><th>Due</th><th class="n">Receipts</th></tr>${t.q.map(x=>`<tr><td>${x.l}</td><td>${x.due}</td><td class="n">${money0(x.g)}</td></tr>`).join('')}</table></div>
+  <div class="card"><h3>1099-NEC check</h3><p class="muted">Starting with 2026 payments, file a 1099-NEC for contractors paid $2,000 or more (was $600).</p><table>${t.k1099.map(l=>`<tr><td>${esc(l.tc.name)}</td><td class="n">${money(l.pay)}</td><td>${l.pay>=(+Y>=2026?2000:600)?'<span class="tag t-bad">File 1099</span>':'<span class="tag t-ok">Under limit</span>'}</td></tr>`).join('')||'<tr><td class="muted">No 1099 contractors.</td></tr>'}</table></div>
+  <div class="card"><h3>Tennessee checklist</h3><ul><li>No TN state income tax on wages or sole-prop income.</li><li>If an LLC/corp: TN franchise &amp; excise tax (FAE 170).</li><li>Metro Nashville / TN business tax (Classification renewal yearly).</li><li>Remit sales tax collected on taxable parts/installs to TN Dept. of Revenue.</li><li>Keep receipts 3+ years; give your preparer the CSV below.</li></ul></div>
+  <div class="row"><button class="btn p" onclick="taxCSV()">⬇️ Export tax package (CSV)</button><button class="btn" onclick="taxPrint()">🖨️ Print summary</button></div>`}
+function taxCSV(){const Y=taxYear,t=taxCalc(Y);const r=[['DVT tax prep',Y],[],['Gross receipts',t.gross.toFixed(2)],['Sales tax collected',t.salesTax.toFixed(2)]];Object.entries(t.exp).forEach(([k,v])=>r.push([k,v.toFixed(2)]));r.push(['Standard mileage ('+t.mileTot+' mi)',t.mileDed.toFixed(2)],['Total expenses',t.totalExp.toFixed(2)],['Net profit',t.net.toFixed(2)],['SE tax est',t.se.toFixed(2)],['Federal est',t.fed.toFixed(2)],[],['Invoice #','Paid date','Customer','Subtotal','Tax','Method']);
+  t.paid.forEach(i=>r.push([i.num,i.paidDate,cust(i.customerId).name,sub_(i.lines).toFixed(2),tax_(i.lines,i.taxRate).toFixed(2),i.method]));r.push([],['Expense date','Category','Vendor','Amount']);S.expenses.filter(e=>yr(e.date)===Y).forEach(e=>r.push([e.date,e.category,e.vendor,e.amount]));r.push([],['Trip date','Crew','Miles','Purpose']);S.mileage.filter(m=>yr(m.date)===Y).forEach(m=>r.push([m.date,tech(m.techId).name,m.miles,m.purpose]));csv(`DVT-tax-${Y}.csv`,r)}
+function taxPrint(){const t=taxCalc(taxYear);$('#print').innerHTML=`<h1>${esc(S.settings.company)} — ${taxYear} Tax Summary</h1><p>Prepared for tax professional. Estimates only.</p><table><tr><td>Gross receipts</td><td>${money(t.gross)}</td></tr>${Object.entries(t.exp).filter(([,v])=>v).map(([k,v])=>`<tr><td>${k}</td><td>${money(v)}</td></tr>`).join('')}<tr><td>Standard mileage</td><td>${money(t.mileDed)}</td></tr><tr><th>Net profit</th><th>${money(t.net)}</th></tr><tr><td>Sales tax collected</td><td>${money(t.salesTax)}</td></tr><tr><td>SE tax est.</td><td>${money(t.se)}</td></tr></table>`;setTimeout(()=>print(),100)}
+
+function oExp(){const t=S.expenses.slice().sort((a,b)=>b.date.localeCompare(a.date));return `<button class="btn p w" style="margin-bottom:12px" onclick="editExp()">＋ Add expense</button><div class="card">${t.map(e=>`<div class="item" onclick="editExp('${e.id}')" style="cursor:pointer"><div class="grow"><b>${esc(e.vendor)}</b>${sb(e)}<div class="muted">${fmtD(e.date)} · ${esc(e.category)}</div></div><b>${money(e.amount)}</b></div>`).join('')||'<p class="muted">No expenses yet.</p>'}</div>`}
+function editExp(id){const e=id?S.expenses.find(x=>x.id===id):{date:today(),category:'Supplies & parts',vendor:'',amount:'',notes:''};formDlg(id?'Edit expense':'Add expense',[['date','Date','date'],['category','Category','select',CATS],['vendor','Vendor / what for'],['amount','Amount ($)','number'],['notes','Notes','textarea']],e,o=>{if(!o.amount)return toast('Amount required'),false;if(id)Object.assign(e,o);else S.expenses.push({id:uid(),...o});return true},id?async()=>{if(await ask('Delete?')){S.expenses=S.expenses.filter(x=>x.id!==id);save();dlgClose();render()}}:null)}
+function oMiles(){const m=S.mileage.slice().sort((a,b)=>b.date.localeCompare(a.date));const tot=m.filter(x=>yr(x.date)===String(new Date().getFullYear())).reduce((a,x)=>a+(+x.miles||0)*mileRate(x.date),0);
+  return `<div class="kpis"><div class="kpi"><span>Mileage deduction (this yr)</span><b>${money0(tot)}</b></div><div class="kpi"><span>Current rate</span><b>${mileRate(today())*100}¢</b></div></div><button class="btn p w" style="margin-bottom:12px" onclick="editMile()">＋ Log trip</button><div class="card">${m.map(x=>`<div class="item" onclick="editMile('${x.id}')" style="cursor:pointer"><div class="grow"><b>${esc(x.purpose)}</b>${sb(x)}<div class="muted">${fmtD(x.date)} · ${esc(tech(x.techId).name)}</div></div><b>${x.miles} mi</b></div>`).join('')||'<p class="muted">No trips.</p>'}</div>`}
+function editMile(id){const m=id?S.mileage.find(x=>x.id===id):{date:today(),techId:S.techs[0]?.id,miles:'',purpose:''};formDlg(id?'Edit trip':'Log trip',[['date','Date','date'],['techId','Driver','select',S.techs.map(t=>[t.id,t.name])],['miles','Miles','number'],['purpose','Purpose (job / supply run)']],m,o=>{if(!o.miles)return toast('Miles required'),false;if(id)Object.assign(m,o);else S.mileage.push({id:uid(),...o});return true},id?async()=>{if(await ask('Delete?')){S.mileage=S.mileage.filter(x=>x.id!==id);save();dlgClose();render()}}:null)}
+function oPrice(){return `<button class="btn p w" style="margin-bottom:12px" onclick="editPrice()">＋ Add service</button><div class="card">${S.pricebook.map(p=>`<div class="item" onclick="editPrice('${p.id}')" style="cursor:pointer"><div class="grow"><b>${esc(p.name)}</b><div class="muted">${p.taxable?'Taxable (parts / install)':'Not taxed'}</div></div><b>${money(p.price)}</b></div>`).join('')}</div><p class="muted">Nashville average dryer vent cleaning is about $162 (2026). Confirm which items are taxable with your accountant.</p>`}
+function editPrice(id){const p=id?S.pricebook.find(x=>x.id===id):{name:'',price:'',taxable:false};formDlg(id?'Edit service':'Add service',[['name','Service name'],['price','Price ($)','number'],['taxable','Charge sales tax?','select',['false','true']]],{...p,taxable:String(p.taxable)},o=>{if(!o.name)return toast('Name required'),false;o.price=+o.price||0;o.taxable=o.taxable==='true';if(id)Object.assign(p,o);else S.pricebook.push({id:uid(),...o});return true},id?async()=>{if(await ask('Delete?')){S.pricebook=S.pricebook.filter(x=>x.id!==id);save();dlgClose();render()}}:null)}
+function oSet(){const s=S.settings;return `<div class="card"><button class="btn w" onclick="editSettings()">✏️ Edit company info, tax rate &amp; PIN</button><p><b>${esc(s.company)}</b> · ${esc(s.owner)}<br>${esc(s.phone)} · ${esc(s.address)}<br>Sales tax ${s.taxRate}% · Est. income tax ${s.estRate}%</p></div>
+  <div class="card"><h3>Backup</h3><p class="muted">Data lives on this phone. Back it up weekly.</p><div class="row"><button class="btn" onclick="backup()">⬇️ Download backup</button><label class="btn" style="margin:0">⬆️ Restore<input type="file" accept=".json" hidden onchange="restore(this.files[0])"></label></div></div>
+  <div class="card"><h3>Data</h3>${S.hasSample?'<button class="btn d w" onclick="clearSample()">Clear sample data</button>':'<button class="btn w" onclick="ask(\'Load sample data again? This replaces everything.\').then(ok=>{if(ok){S=sampleData();save();render()}})">Reload sample data</button>'}<button class="btn w" style="margin-top:8px" onclick="ownerOK=false;go('today')">🔒 Lock owner panel</button></div>`}
+function editSettings(){const s=S.settings;formDlg('Company settings',[['company','Company name'],['owner','Owner'],['phone','Phone','tel'],['email','Email','email'],['address','Address'],['web','Website'],['taxRate','Sales tax % (Nashville 9.25)','number'],['estRate','Est. federal income tax %','number'],['pin','Owner PIN','text']],s,o=>{o.taxRate=+o.taxRate||0;o.estRate=+o.estRate||0;if(!o.pin)return toast('PIN required'),false;Object.assign(s,o);return true})}
+function backup(){const b=new Blob([JSON.stringify(S)],{type:'application/json'});dl(b,`DVT-backup-${today()}.json`)}
+function restore(f){if(!f)return;const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);if(!d.customers)throw 0;S=d;save();render();toast('Restored')}catch(x){toast('Not a valid backup file')}};r.readAsText(f)}
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}
+function csv(name,rows){dl(new Blob([rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\n')],{type:'text/csv'}),name)}
+
+/* ---------- dialog + generic forms ---------- */
+function dlgOpen(title,body,foot){const d=$('#dlg');d.innerHTML=`<div class="dh"><h3>${title}</h3><button class="ib" onclick="dlgClose()" aria-label="Close">✕</button></div><div class="db">${body}</div><div class="df">${foot||''}</div>`;if(!d.open)d.showModal();d.scrollTop=0}
+function dlgClose(){const d=$('#dlg');if(d.open)d.close()}
+let formCb=null,formDel=null;
+function formDlg(title,fields,obj,cb,del){formCb=cb;formDel=del;
+  const f=fields.map(([k,l,t,opts])=>{const v=obj[k]??'';if(t==='select')return `<label>${l}</label><select name="${k}">${opts.map(o=>{const [val,lab]=Array.isArray(o)?o:[o,o==='true'?'Yes':o==='false'?'No':o];return `<option value="${esc(val)}" ${String(val)===String(v)?'selected':''}>${esc(lab)}</option>`}).join('')}</select>`;
+    if(t==='textarea')return `<label>${l}</label><textarea name="${k}">${esc(v)}</textarea>`;
+    return `<label>${l}</label><input name="${k}" type="${t==='number'?'text':t||'text'}" ${t==='number'?'inputmode="decimal"':''} value="${esc(v)}">`}).join('');
+  dlgOpen(title,`<form id="gf" onsubmit="return false">${f}</form>`,`${del?'<button class="btn d" onclick="formDel()">Delete</button>':'<button class="btn" onclick="dlgClose()">Cancel</button>'}<button class="btn p" onclick="formSave()">Save</button>`)}
+function formSave(){const o=Object.fromEntries(new FormData($('#gf')));if(formCb(o)!==false){save();dlgClose();render();toast('Saved')}}
+
+/* ---------- voice typing ---------- */
+let rec=null,lastField=null;
+document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]):not([type=file]),textarea'))lastField=e.target});
+function dictate(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return toast('Tap a box, then the mic on your keyboard');
+  if(rec){rec.stop();return}
+  const f=lastField&&document.body.contains(lastField)?lastField:document.querySelector('.search');if(!f)return toast('Tap a box first');
+  rec=new SR();rec.lang='en-US';rec.interimResults=false;$('#mic').classList.add('on');
+  rec.onresult=e=>{const t=e.results[0][0].transcript;f.value=(f.value&&f.type!=='date'?f.value+' ':'')+t;f.dispatchEvent(new Event('input',{bubbles:true}));f.dispatchEvent(new Event('change',{bubbles:true}))};
+  rec.onend=()=>{rec=null;$('#mic').classList.remove('on')};rec.onerror=()=>toast('Mic not available');rec.start()}
+
+
+/* ---------- in-app confirm (browser popups are blocked in some viewers) ---------- */
+function ask(msg){return new Promise(res=>{const d=document.createElement('dialog');d.style.cssText='max-width:420px';d.innerHTML=`<div class="db" style="padding:20px"><p style="font-size:20px;font-weight:700">${esc(msg)}</p><div class="row"><button class="btn" data-v="0">Cancel</button><button class="btn p" data-v="1">Yes</button></div></div>`;document.body.appendChild(d);d.onclick=e=>{const v=e.target.dataset&&e.target.dataset.v;if(v!==undefined){d.close();d.remove();res(v==='1')}};d.oncancel=()=>{d.remove();res(false)};d.showModal()})}
+/* ---------- COMPANY DIRECTION ---------- */
+const DQ=[['mission','In one sentence, what is Dryer Vent Tech about? For example: "Keep Nashville homes fire-safe with honest vent service."'],['monthGoal','What is your monthly revenue goal? Just say a number, like 8000.'],['yearGoal','And your yearly revenue goal?'],['focus','Which services do you most want to grow? For example: home cleanings, apartment contracts, reroutes, booster fans.'],['customers','Which customers do you want more of? For example: homeowners, property managers, realtors.'],['area','Which areas do you want to work most?'],['hiring','Any hiring plans this year?'],['quarter','What are your top priorities for the next 3 months?']];
+const DLABEL={mission:'Mission',monthGoal:'Monthly revenue goal ($)',yearGoal:'Yearly revenue goal ($)',focus:'Services to grow',customers:'Customers to win',area:'Areas to focus on',hiring:'Hiring plan',quarter:'Top priorities, next 3 months',notes:'Other notes for Jay'};
+function revIn(from,to){return paidIn(from,to).reduce((s,i)=>s+sub_(i.lines),0)}
+function directionStatus(){const d=S.direction||{},t=today();
+  if(!d.monthGoal&&!d.yearGoal&&!d.mission)return '<p>No direction set yet. Tell Jay your goals so the app can track progress and suggest next moves.</p><button class="btn s p" onclick="jay.open();jay.ask(\'Set company direction\')">Set direction with Jay</button>';
+  const m=revIn(t.slice(0,7)+'-01',t),y=revIn(t.slice(0,4)+'-01-01',t);const bar=(v,g)=>`<div class="jay-bar" style="height:14px;background:var(--line);border-radius:7px;overflow:hidden;margin:6px 0"><i style="display:block;height:100%;width:${Math.min(100,g?v/g*100:0)}%;background:var(--accent)"></i></div>`;
+  return `${d.mission?`<p><b>${esc(d.mission)}</b></p>`:''}${d.monthGoal?`<p>This month: <b>${money0(m)}</b> of ${money0(d.monthGoal)} (${Math.round(m/d.monthGoal*100)}%)</p>${bar(m,d.monthGoal)}`:''}${d.yearGoal?`<p>This year: <b>${money0(y)}</b> of ${money0(d.yearGoal)} (${Math.round(y/d.yearGoal*100)}%)</p>${bar(y,d.yearGoal)}`:''}`}
+function oDir(){const d=S.direction||{};return `<div class="card"><h3>Where you stand</h3>${directionStatus()}</div>
+  <div class="card"><h3>Your direction</h3><p class="muted">Jay uses this to track goals and suggest what to focus on. Talk it through or fill it in.</p><button class="btn p w" onclick="jay.open();jay.ask('Set company direction')">💬 Talk it through with Jay</button>
+  <form id="dirf" onsubmit="return false">${Object.entries(DLABEL).map(([k,l])=>k==='mission'||k==='quarter'||k==='notes'||k==='focus'?`<label for="dir_${k}">${l}</label><textarea id="dir_${k}" name="${k}">${esc(d[k]||'')}</textarea>`:`<label for="dir_${k}">${l}</label><input id="dir_${k}" name="${k}" ${k.endsWith('Goal')?'inputmode="decimal"':''} value="${esc(d[k]||'')}">`).join('')}</form>
+  <button class="btn p w" style="margin-top:12px" onclick="saveDir()">Save direction</button>${d.updated?`<p class="muted">Last updated ${fmtD(d.updated)}</p>`:''}</div>
+  <div class="card"><h3>Jay's suggestions</h3>${suggestions()}</div>`}
+function saveDir(){const o=Object.fromEntries(new FormData($('#dirf')));o.monthGoal=+String(o.monthGoal).replace(/[^0-9.]/g,'')||'';o.yearGoal=+String(o.yearGoal).replace(/[^0-9.]/g,'')||'';S.direction={...S.direction,...o,updated:today()};save();render();toast('Direction saved')}
+function suggestions(){const t=today(),d=S.direction||{},out=[];
+  const due=S.customers.filter(c=>c.nextDue&&c.nextDue<=addDays(t,30));if(due.length)out.push(`Text the <b>${due.length}</b> customer${due.length>1?'s':''} due for a yearly cleaning (Today tab → Text). These are your easiest jobs.`);
+  const unpaid=S.invoices.filter(i=>i.status!=='Paid');if(unpaid.length)out.push(`Collect <b>${money0(unpaid.reduce((a,i)=>a+invTotal(i),0))}</b> in unpaid invoices from ${unpaid.length} customer${unpaid.length>1?'s':''}.`);
+  const open=S.customers.filter(c=>c.stage==='Lead'||c.stage==='Quoted');if(open.length)out.push(`Follow up on <b>${open.length}</b> open lead${open.length>1?'s':''}/quote${open.length>1?'s':''}: ${open.slice(0,3).map(c=>esc(c.name)).join(', ')}.`);
+  if(d.monthGoal){const m=revIn(t.slice(0,7)+'-01',t),left=d.monthGoal-m;const dl=new Date(+t.slice(0,4),+t.slice(5,7),0).getDate()-+t.slice(8,10)+1;if(left>0){const avg=(()=>{const js=S.jobs.filter(j=>j.status==='Done');return js.length?js.reduce((a,j)=>a+sub_(j.lines),0)/js.length:150})();out.push(`You need <b>${money0(left)}</b> more to hit this month's goal: about <b>${Math.ceil(left/avg)}</b> more jobs at your ${money0(avg)} average, over ${dl} days.`)}else out.push('🎉 You\'ve hit this month\'s revenue goal. Consider raising it.')}
+  const f=(d.focus||'')+' '+(d.customers||'');if(/apart|property|pm|hoa|multi/i.test(f))out.push('Your focus includes apartments/property managers: call 2 complexes this week and offer a per-unit rate with a safety report for every unit.');
+  if(/realtor|inspect/i.test(f))out.push('Your focus includes realtors: offer agents a same-week dryer vent fix with a written report they can hand to buyers.');
+  const mo=+t.slice(5,7);if(mo>=9&&mo<=11)out.push('It\'s fall: dryer fires peak in winter, so this is the best time to promote cleanings.');
+  if(!d.monthGoal)out.push('Set a monthly revenue goal so I can track your progress.');
+  return out.length?'<ol>'+out.map(x=>`<li>${x}</li>`).join('')+'</ol>':'<p>You\'re all caught up. Nice work.</p>'}
+
+/* ---------- JAY (owner mode) ---------- */
+let interview=null,jay=null;
+function jayResolver(raw,t){
+  if(interview!==null){
+    if(/\b(stop|cancel|quit|never mind)\b/.test(t)){interview=null;return{html:'Okay, stopped. Your answers so far are saved in Owner → Direction.'}}
+    if(/\b(skip|pass|not sure)\b/.test(t)){interview++}else{const k=DQ[interview][0];let v=raw.trim();if(k.endsWith('Goal')){let n=parseFloat(v.replace(/,/g,'').replace(/[^0-9.]/g,''));if(/\d\s*k\b|thousand/.test(t)&&n<10000)n*=1000;v=isNaN(n)?'':n}S.direction[k]=v;save();interview++}
+    if(interview<DQ.length)return{html:DQ[interview][1]+' <span class="muted">(say "skip" to skip)</span>'};
+    interview=null;S.direction.updated=today();save();if(view==='owner')render();
+    return{html:'<p>Saved. Here\'s where you stand:</p>'+directionStatus(),chips:['What should I focus on?','How much did we make this month?']}}
+  if(/(set|update|start|change|new|redo).{0,20}(direction|goals?)|direction (interview|setup)/.test(t)){interview=0;S.direction=S.direction||{};return{html:'<p>Let\'s set your company direction. I\'ll ask a few questions. Say "stop" anytime.</p><p>'+DQ[0][1]+'</p>'}}
+  if(/\bhow (do|can|to|does|should i (add|make|use))\b|\bwhere (is|do|can)\b/.test(t))return null;
+  const tt=today();
+  if(/(focus|what should i|advice|next move|what now|priorit|suggest|recommend|progress|on track|goal)/.test(t))return{html:directionStatus()+'<p><b>Next moves:</b></p>'+suggestions(),chips:['Who owes us?','Who\'s due?','Set company direction']};
+  if(/(revenue|did we make|have we made|we made|sales|income|earned|bring in|brought in)/.test(t)){
+    const m=revIn(tt.slice(0,7)+'-01',tt),y=revIn(tt.slice(0,4)+'-01-01',tt),d=revIn(tt,tt),wk=revIn(addDays(tt,-6),tt);
+    return{html:`<table class="jay-tbl"><tr><td>Today</td><td>${money(d)}</td></tr><tr><td>Last 7 days</td><td>${money(wk)}</td></tr><tr><td>This month</td><td><b>${money(m)}</b></td></tr><tr><td>This year</td><td><b>${money(y)}</b></td></tr></table><p class="muted">Paid invoices, before sales tax.</p>${S.direction&&S.direction.monthGoal?directionStatus():''}`,chips:['Who owes us?','What should I focus on?']}}
+  if(/(owe|owes|unpaid|outstanding|receivable|collect|past due|not paid)/.test(t)){const u=S.invoices.filter(i=>i.status!=='Paid');
+    return{html:u.length?`<p><b>${money(u.reduce((a,i)=>a+invTotal(i),0))}</b> unpaid:</p><table class="jay-tbl">${u.map(i=>`<tr><td>#${i.num} ${esc(cust(i.customerId).name)} · ${fmtD(i.date)}</td><td>${money(invTotal(i))}</td></tr>`).join('')}</table>`:'<p>Nobody owes you right now. 🎉</p>',chips:['How much did we make this month?']}}
+  if(/(due|reminder|rebook|yearly cleaning)/.test(t)){const due=S.customers.filter(c=>c.nextDue&&c.nextDue<=addDays(tt,30)).sort((a,b)=>a.nextDue.localeCompare(b.nextDue));
+    return{html:due.length?`<p>${due.length} due in the next 30 days:</p><table class="jay-tbl">${due.map(c=>`<tr><td>${esc(c.name)} · ${esc(c.phone)}</td><td>${fmtD(c.nextDue)}</td></tr>`).join('')}</table><p>Text them from the Today tab.</p>`:'<p>Nobody is due in the next 30 days.</p>'}}
+  if(/(tomorrow)/.test(t)){const js=S.jobs.filter(j=>j.date===addDays(tt,1)&&j.status!=='Canceled').sort((a,b)=>a.time.localeCompare(b.time));return{html:js.length?`<p>Tomorrow:</p><table class="jay-tbl">${js.map(j=>`<tr><td>${esc(j.time)} ${esc(cust(j.customerId).name)} · ${esc(tech(j.techId).name)}</td><td>${money(jobTotal(j))}</td></tr>`).join('')}</table>`:'<p>Nothing booked for tomorrow yet.</p>'}}
+  if(/(today|schedule|route|on the books|whats on|jobs this|my day)/.test(t)){const js=S.jobs.filter(j=>j.date===tt&&j.status!=='Canceled').sort((a,b)=>a.time.localeCompare(b.time));
+    return{html:js.length?`<p>${js.length} job${js.length>1?'s':''} today:</p><table class="jay-tbl">${js.map(j=>`<tr><td>${esc(j.time)} ${esc(cust(j.customerId).name)} · ${esc(tech(j.techId).name)} · ${esc(j.status)}</td><td>${money(jobTotal(j))}</td></tr>`).join('')}</table>`:'<p>No jobs today.</p>',chips:['Who\'s due?','Tomorrow']}}
+  if(/(leads?|pipeline|prospects?|quotes?)\b/.test(t)){return{html:`<table class="jay-tbl">${STAGES.map(s=>`<tr><td>${s}</td><td>${S.customers.filter(c=>c.stage===s).length}</td></tr>`).join('')}</table>`,chips:['How do I get more customers?']}}
+  if(/(payroll|crew|techs?|best tech|leaderboard|employees?)\b/.test(t)){const from=addDays(tt,-13);return{html:`<p>Last 14 days:</p><table class="jay-tbl">${S.techs.map(tc=>{const p=techPay(tc,from,tt);return `<tr><td>${esc(tc.name)} · ${p.jobs} jobs · ${p.hrs} h</td><td>${money(p.pay)}</td></tr>`}).join('')}</table>`}}
+  if(/(set aside|taxes|tax bill|owe the irs|irs|estimated tax|quarterly)/.test(t)){const x=taxCalc(String(new Date().getFullYear()));return{html:`<table class="jay-tbl"><tr><td>Net profit so far</td><td>${money(x.net)}</td></tr><tr><td>Self-employment tax est.</td><td>${money(x.se)}</td></tr><tr><td>Federal income tax est. (${S.settings.estRate}%)</td><td>${money(x.fed)}</td></tr><tr><td><b>Set aside</b></td><td><b>${money(x.se+x.fed)}</b></td></tr><tr><td>Sales tax collected (owed to TN)</td><td>${money(x.salesTax)}</td></tr></table><p class="muted">Estimates to plan with, not tax advice.</p>`}}
+  if(/(spent|expenses|costs this)/.test(t)){const y=tt.slice(0,4);const e=S.expenses.filter(x=>yr(x.date)===y);return{html:`<p>Expenses this year: <b>${money(e.reduce((a,x)=>a+(+x.amount||0),0))}</b> across ${e.length} entries.</p>`}}
+  const c=S.customers.find(c=>c.name.toLowerCase().split(/[\s(&–-]+/).some(w=>w.length>3&&t.includes(' '+w+' ')));
+  if(c&&/(phone|number|address|about|history|last|when|info|call)/.test(t)){const js=S.jobs.filter(j=>j.customerId===c.id&&j.status==='Done');return{html:`<p><b>${esc(c.name)}</b> · ${esc(c.type)} · ${esc(c.stage)}</p><p>${esc(c.phone)}<br>${esc(c.address)}</p><p>${js.length} finished job${js.length===1?'':'s'} · last ${fmtD(c.lastService)} · next due ${fmtD(c.nextDue)}</p>`}}
+  return null;
+}
+function startJay(){if(!window.Jay)return;jay=Jay.mount({mode:'owner',subtitle:'Your business assistant',fabLabel:'Jay',fabPos:{left:'16px',bottom:'calc(86px + env(safe-area-inset-bottom,0px))'},resolver:jayResolver,
+  greeting:`<p>Hi ${esc((S.settings.owner||'').split(' ')[0]||'there')}, I'm Jay. Ask me about your numbers, customers, crew, taxes, how to use the app, or anything dryer vent.</p>`,
+  starters:['What should I focus on?','How much did we make this month?','Who owes us?','Set company direction','How do I get more customers?']})}
+
+load();applyTheme();render();startJay();
+</script>
+<script src="../jay.js"></script>
+<script>if(!jay)startJay();</script>
+</body>
+</html>
