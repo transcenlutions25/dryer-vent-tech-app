@@ -299,9 +299,10 @@ function printInvoice(id){const i=S.invoices.find(x=>x.id===id),c=cust(i.custome
 /* ---------- OWNER COMMAND PANEL ---------- */
 function vOwner(){
   if(!ownerOK)return `<h2>🛡️ Owner Command Panel</h2><div class="card"><p>Owner-only: crew, CRM pipeline, money and tax prep.</p><label>Owner PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off" onkeydown="if(event.key==='Enter')unlock()"><button class="btn p w" style="margin-top:12px" onclick="unlock()">Unlock</button>${S.hasSample?'<p class="muted">Sample PIN: 1234 (change it in Settings).</p>':''}</div>`;
-  const T=[['dash','📊 Dashboard'],['dir','🧭 Direction'],['crew','👷 Crew'],['pipe','📈 CRM pipeline'],['tax','🧮 Tax prep'],['exp','💳 Expenses'],['miles','🚐 Mileage'],['price','🏷️ Price book'],['set','⚙️ Settings']];
-  return `<h2>🛡️ Owner Command Panel</h2><div class="subtabs">${T.map(([k,l])=>`<button class="${sub.owner===k?'on':''}" onclick="sub.owner='${k}';render()">${l}</button>`).join('')}</div>`+({dash:oDash,dir:oDir,crew:oCrew,pipe:oPipe,tax:oTax,exp:oExp,miles:oMiles,price:oPrice,set:oSet}[sub.owner])();
+  const T=[['dash','📊 Dashboard'],['dir','🧭 Direction'],['crew','👷 Crew'],['pipe','📈 CRM pipeline'],['tax','🧮 Tax prep'],['exp','💳 Expenses'],['miles','🚐 Mileage'],['price','🏷️ Price book'],['post','📣 Post maker'],['set','⚙️ Settings']];
+  return `<h2>🛡️ Owner Command Panel</h2><div class="subtabs">${T.map(([k,l])=>`<button class="${sub.owner===k?'on':''}" onclick="sub.owner='${k}';render()">${l}</button>`).join('')}</div>`+({dash:oDash,dir:oDir,crew:oCrew,pipe:oPipe,tax:oTax,exp:oExp,miles:oMiles,price:oPrice,post:oPost,set:oSet}[sub.owner])();
 }
+function oPost(){return `<div class="card"><h3>📣 Post maker</h3><p>Make a local Facebook or Instagram post in one minute: Nashville tag, a two-line headline, your service line, your own job photo and one button. Download the picture and post it from your phone.</p><a class="btn p w" href="post-maker.html">Open the post maker</a><p class="muted">Works now: build, preview, download, caption. Not connected: posting to your accounts.</p></div>`}
 function unlock(){if($('#pin').value===String(S.settings.pin)){ownerOK=true;render()}else toast('Wrong PIN')}
 const paidIn=(from,to)=>S.invoices.filter(i=>i.status==='Paid'&&i.paidDate>=from&&i.paidDate<=to);
 function oDash(){const t=today(),m0=t.slice(0,7)+'-01',y0=t.slice(0,4)+'-01-01';
